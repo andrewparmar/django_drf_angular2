@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.generic import RedirectView
 
 from core import views
+
+from django.contrib.staticfiles.views import serve
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,4 +31,6 @@ urlpatterns = [
     url(r'^locations/(?P<pk>[0-9]+)$', views.location_detail.as_view()),
     url(r'^transactions/$', views.transaction_list.as_view()),
     url(r'^transactions/(?P<pk>[0-9]+)$', views.transaction_detail.as_view()),
+    url(r'^$', serve, kwargs={'path': 'index.html'}),
+    url(r'^(?!/?static/)(?!/?media/)(?P<path>.*\..*)$',RedirectView.as_view(url='/static/%(path)s', permanent=False)),
 ]

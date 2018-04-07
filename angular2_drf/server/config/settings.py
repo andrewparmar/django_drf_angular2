@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = '/Users/aparmar/Development/django_drf_angular2/angular2_drf'
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +28,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+ANGULAR_APP_DIR = os.path.join(BASE_DIR, 'client/dist')
+
+STATICFILES_DIRS = [
+    os.path.join(ANGULAR_APP_DIR),
+] 
+
 
 # Application definition
 
@@ -39,11 +48,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -121,9 +132,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 # REST Framework
 REST_FRAMEWORK = {
-'DEFAULT_PERMISSION_CLASSES':
-    ['rest_framework.permissions.IsAdminUser'],
-'PAGE_SIZE': 10
+    'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAdminUser'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'PAGE_SIZE': 10
 }
+
+
+
